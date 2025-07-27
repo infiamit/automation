@@ -28,9 +28,9 @@ def fetch_gmp_data():
     data = resp.json()
     return data.get("reportTableData", [])
 
-def parse_close_date(close_str):
+def parse_close_date_iso(close_str_iso):
     try:
-        return datetime.strptime(close_str.strip(), "%d-%b").replace(year=datetime.today().year).date()
+        return datetime.strptime(close_str_iso, "%Y-%m-%d").date()
     except Exception:
         return None
 
@@ -41,10 +41,9 @@ def filter_ipos(ipos):
     for ipo in ipos:
         category = ipo.get("~IPO_Category", "")
         gmp_raw = ipo.get("GMP", "")
-        gmp = parse_gmp(gmp_raw)
-        close_str = ipo.get("Close", "")
-        close_date = parse_close_date(close_str)
-
+        gmp = parse_gmp(gmp_raw) 
+        close_date = parse_close_date_iso(ipo.get("~Srt_Close", ""))
+        
         if not close_date or close_date < today:
             continue
 
@@ -139,7 +138,7 @@ def main():
     if recipients:
         to_emails = [email.strip() for email in recipients.split(",")]
         send_email(
-            subject="🚨 GMP IPO Alert - High Interest Opportunities",
+            subject="🚨 GMP IPO Alert - " + datetime.today().strftime('%d-%b-%Y'),
             body=html_body,
             to_emails=to_emails,
             is_html=True
