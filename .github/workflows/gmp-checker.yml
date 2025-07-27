@@ -30,4 +30,4 @@ jobs:
           pip install requests
 
       - name: Run GMP Checker
-        run: python scripts/gmp_checker.py
+        run: python -m scripts.gmp_checker
