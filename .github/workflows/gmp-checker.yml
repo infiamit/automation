@@ -1,0 +1,33 @@
+name: GMP Checker
+
+on:
+  schedule:
+    # Runs every day at 2:30 AM UTC ~ 8 AM IST
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-gmp-checker:
+    runs-on: ubuntu-latest
+
+    env:
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      NOTIFY_EMAILS: ${{ secrets.NOTIFY_EMAILS }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run GMP Checker
+        run: python scripts/gmp_checker.py
