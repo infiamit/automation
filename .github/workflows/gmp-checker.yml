@@ -2,8 +2,9 @@ name: GMP Checker
 
 on:
   schedule:
-    # Runs every day at 2:30 AM UTC ~ 8 AM IST
-    - cron: '30 2 * * *'
+    - cron: '30 2 * * *'   # 08:00 AM IST
+    - cron: '30 8 * * *'   # 02:00 PM IST
+    - cron: '30 14 * * *'  # 08:00 PM IST
   workflow_dispatch:
 
 jobs:
