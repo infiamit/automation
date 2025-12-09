@@ -40,6 +40,7 @@ HEADERS = {
 def fetch_gmp_data():
     resp = requests.get(GMP_API_URL, headers=HEADERS, timeout=10)
     resp.raise_for_status()
+    print("Got Response", resp)
     data = resp.json()
     return data.get("reportTableData", [])
 
