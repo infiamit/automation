@@ -23,6 +23,7 @@ def parse_gmp(gmp_str):
     return 0.0
 
 
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -31,19 +32,29 @@ HEADERS = {
     ),
     "Accept": "application/json, text/javascript, */*; q=0.01",
     "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
     "Referer": "https://www.google.com/",
     "Origin": "https://www.google.com",
-    "Connection": "keep-alive",
 }
 
 def fetch_gmp_data():
     resp = requests.get(GMP_API_URL, headers=HEADERS, timeout=10)
-    resp.raise_for_status()
-    print("Got Response", resp)
-    data = resp.json()
-    return data.get("reportTableData", [])
 
+    # If server returns HTML instead of JSON → bot-block
+    content_type = resp.headers.get("Content-Type", "").lower()
+
+    if "json" not in content_type:
+        print("⚠️ Server did NOT return JSON. Dumping first 300 chars:")
+        print(resp.text[:300])
+        raise ValueError("Blocked or unexpected response returned")
+
+    try:
+        data = resp.json()
+    except json.JSONDecodeError:
+        print("⚠️ JSON decode failed — likely blocked. Dumping first 300 chars:")
+        print(resp.text[:300])
+        raise
+
+    return data.get("reportTableData", [])
 def parse_close_date_iso(close_str_iso):
     try:
         return datetime.strptime(close_str_iso, "%Y-%m-%d").date()
