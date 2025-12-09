@@ -33,8 +33,7 @@ HEADERS = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
     "Accept-Language": "en-US,en;q=0.9",
     "Referer": "https://www.google.com/",
-    "Origin": "https://www.google.com",
-    "Accept-Encoding": "gzip, deflate, br",
+    "Origin": "https://www.google.com"
 }
 
 def fetch_gmp_data():
