@@ -37,7 +37,7 @@ HEADERS = {
 }
 
 def fetch_gmp_data():
-    resp = requests.get(GMP_API_URL, headers=HEADERS, timeout=10)
+    resp = requests.get(GMP_API_URL, headers=HEADERS, timeout=60)
 
     # If server returns HTML instead of JSON → bot-block
     content_type = resp.headers.get("Content-Type", "").lower()
